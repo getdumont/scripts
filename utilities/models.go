@@ -35,6 +35,10 @@ type Tweet struct {
 	WithoutRt 			string 			`bson:"without_rt"`
 }
 
+func (t *Tweet) GetSentimentScoreAverage() float64 {
+	return (t.CleanSentiment.Score + t.RawSentiment.Score) / 2
+}
+
 type User struct {
 	Id					bson.ObjectId	`bson:"_id"`
 	Protected 			bool 			`bson:"protected"`
@@ -51,6 +55,25 @@ type User struct {
 	ProfileSideBorderC 	string 			`bson:"profile_sidebar_border_color"`
 	ProfileSideFillC 	string 			`bson:"profile_sidebar_fill_color"`
 	ProfileTextColor 	string 			`bson:"profile_text_color"`
-
 }
 
+type Sample struct {
+	Id 				 	 bson.ObjectId `bson:"_id"`
+	User 			 	 User 		   `bson:"user"`
+	OtherTweets		  	 []Tweet 	   `bson:"other_tweets"`
+	NegativeTweets  	 []Tweet 	   `bson:"negative_tweets"`
+}
+
+func (s *Sample) IsValid() bool {
+	otherTweetsQtd := len(s.OtherTweets)
+	negativeTweetsQtd := len(s.NegativeTweets)
+
+	totalTweets := otherTweetsQtd + negativeTweetsQtd
+	negativePercentage := (float64(negativeTweetsQtd) * 100) / float64(otherTweetsQtd)
+
+	if totalTweets > 50 && negativePercentage > float64(30) {
+		return true
+	}
+
+	return false
+}
