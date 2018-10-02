@@ -16,8 +16,8 @@ func TransferTweets() () {
 	totalTweets, _ := atlasCol.Count()
 	totalProcessed := 0
 
-	fmt.Print("--- Start Local Pull ---\n")
-	fmt.Printf("Proccess Info: %d/%d\n", totalTweets, totalProcessed)
+	fmt.Print(" > Start Tweets\n")
+	fmt.Printf("  - Proccess Info: %d/%d\n", totalTweets, totalProcessed)
 	for totalTweets >= totalProcessed {
 		var tweets []Tweet
 		atlasCol.Find(nil).Skip(totalProcessed).Limit(250).All(&tweets)
@@ -25,15 +25,15 @@ func TransferTweets() () {
 		for _, tweet := range tweets {
 			err := localCol.Insert(&tweet)
 			if err != nil {
-				fmt.Printf("Fail At: %s", tweet.Id)
+				fmt.Printf("  - Fail At: %s", tweet.Id)
 			}
 		}
 
 		totalProcessed = totalProcessed + 250
-		fmt.Printf("Proccess Info: %d/%d\n", totalTweets, totalProcessed)
+		fmt.Printf("  - Proccess Info: %d/%d\n", totalTweets, totalProcessed)
 
 	}
-	fmt.Print("--- End Local Pull ---")
+	fmt.Print("  - End Pull For Tweets")
 }
 
 func TransferUsers() () {
@@ -46,8 +46,8 @@ func TransferUsers() () {
 	totalUsers, _ := atlasCol.Count()
 	totalProcessed := 0
 
-	fmt.Print("--- Start Local Pull ---\n")
-	fmt.Printf("Proccess Info: %d/%d\n", totalUsers, totalProcessed)
+	fmt.Print(" > Start Users\n")
+	fmt.Printf("  - Proccess Info: %d/%d\n", totalUsers, totalProcessed)
 	for totalUsers >= totalProcessed {
 		var users []User
 		atlasCol.Find(nil).Skip(totalProcessed).Limit(80).All(&users)
@@ -60,8 +60,8 @@ func TransferUsers() () {
 		}
 
 		totalProcessed = totalProcessed + 80
-		fmt.Printf("Proccess Info: %d/%d\n", totalUsers, totalProcessed)
+		fmt.Printf("  - Proccess Info: %d/%d\n", totalUsers, totalProcessed)
 
 	}
-	fmt.Print("--- End Local Pull ---")
+	fmt.Print("  - End Pull For Tweets")
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"fmt"
 	"gopkg.in/alecthomas/kingpin.v2"
 	"github.com/getdumont/scripts/select_sample"
 	"github.com/getdumont/scripts/dataset_to_local"
@@ -16,6 +17,7 @@ var (
 func main() {
 	switch kingpin.MustParse(app.Parse(os.Args[1:])) {
 		case pull.FullCommand():
+			fmt.Print("--- Start Local Pull ---")
 			dataset_to_local.TransferUsers()
 			dataset_to_local.TransferTweets()
 		case sample.FullCommand():

@@ -69,9 +69,9 @@ func (s *Sample) IsValid() bool {
 	negativeTweetsQtd := len(s.NegativeTweets)
 
 	totalTweets := otherTweetsQtd + negativeTweetsQtd
-	negativePercentage := (float64(negativeTweetsQtd) * 100) / float64(otherTweetsQtd)
+	negativePercentage := (float64(negativeTweetsQtd) * 100) / float64(totalTweets)
 
-	if totalTweets > 50 && negativePercentage > float64(30) {
+	if negativeTweetsQtd > 26 && negativePercentage >= float64(30) {
 		return true
 	}
 
