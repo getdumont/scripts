@@ -5,6 +5,11 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
+var (
+	NEGATIVE_TWEET_MEDIA = 30
+	NEGATIVE_PERCENT = 20
+)
+
 type TextObject struct {
 	Raw 		string 	 `bson:"rawText"`
 	PreClear 	string 	 `bson:"preClear"`
@@ -71,7 +76,7 @@ func (s *Sample) IsValid() bool {
 	totalTweets := otherTweetsQtd + negativeTweetsQtd
 	negativePercentage := (float64(negativeTweetsQtd) * 100) / float64(totalTweets)
 
-	if negativeTweetsQtd > 26 && negativePercentage >= float64(30) {
+	if negativeTweetsQtd > NEGATIVE_TWEET_MEDIA && negativePercentage >= float64(NEGATIVE_PERCENT) {
 		return true
 	}
 

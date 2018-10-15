@@ -25,7 +25,7 @@ func negativeTweetsProcess(tweets []Tweet) ([]Tweet, []Tweet) {
 	return negativeTweets, otherTweets
 }
 
-func Run() {
+func Run(processing_version int16) {
 	fmt.Print("Sample Command \n")
 	fmt.Print("  > Connections Open\n")
 
@@ -45,7 +45,7 @@ func Run() {
 	for _, user := range _users {
 		var _tweets []Tweet
 		tweets.Find(bson.M{
-			"processing_version": 1,
+			"processing_version": processing_version,
 			"_user": user.Id,
 		}).All(&_tweets)
 
