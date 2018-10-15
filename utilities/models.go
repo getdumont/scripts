@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	NEGATIVE_TWEET_MEDIA = 30
+	NEGATIVE_TWEET_MEDIA = 32
 	NEGATIVE_PERCENT = 20
 )
 
