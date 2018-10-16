@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	LIMIT_MAGNITUDE = float64(0.35)
+	LIMIT_SCORE = (float64(0.2) * -1)
 )
 
 func negativeTweetsProcess(tweets []Tweet) ([]Tweet, []Tweet) {
@@ -15,7 +15,7 @@ func negativeTweetsProcess(tweets []Tweet) ([]Tweet, []Tweet) {
 	otherTweets := []Tweet{}
 
 	for _, tweet := range tweets {
-		if tweet.GetSentimentScoreAverage() < float64(0) {
+		if tweet.GetSentimentScoreAverage() < float64(LIMIT_SCORE) {
 			negativeTweets = append(negativeTweets, tweet)
 		} else {
 			otherTweets = append(otherTweets, tweet)
