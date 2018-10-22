@@ -54,7 +54,6 @@ func Run(processing_version int16) {
 			"_user": user.Id,
 		}).All(&_tweets)
 
-		totalTweets = append(totalTweets, _tweets...)
 		negativeTweets, otherTweets := negativeTweetsProcess(_tweets)
 
 		sample := Sample{
@@ -66,6 +65,7 @@ func Run(processing_version int16) {
 
 		if sample.IsValid() {
 			totalSamples = totalSamples + 1
+			totalTweets = append(totalTweets, _tweets...)
 			samples.Insert(&sample)
 		}
 	}
