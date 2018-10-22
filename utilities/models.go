@@ -69,6 +69,12 @@ type Sample struct {
 	NegativeTweets  	 []Tweet 	   `bson:"negative_tweets"`
 }
 
+type List struct {
+	Id			bson.ObjectId   `bson:"_id"`
+	Tweets 		[]bson.ObjectId `bson:"tweets"`
+	Specialists	[]bson.ObjectId `bson:"specialists_done"`
+}
+
 func (s *Sample) IsValid() bool {
 	otherTweetsQtd := len(s.OtherTweets)
 	negativeTweetsQtd := len(s.NegativeTweets)

@@ -8,6 +8,7 @@ import (
 
 var (
 	LIMIT_SCORE = (float64(0.2) * -1)
+	LIST_LIMIT = 200
 )
 
 func negativeTweetsProcess(tweets []Tweet) ([]Tweet, []Tweet) {
@@ -32,12 +33,16 @@ func Run(processing_version int16) {
 	users, userConnClose := ConnectAndGetCollection(LocalConfig, "users")
 	tweets, tweetConnClose := ConnectAndGetCollection(LocalConfig, "tweets")
 	samples, sampleConnClose := ConnectAndGetCollection(LocalConfig, "samples")
+	lists, listConnClose := ConnectAndGetCollection(LocalConfig, "lists")
 
 	defer userConnClose()
 	defer tweetConnClose()
 	defer sampleConnClose()
+	defer listConnClose()
 
 	var _users []User
+	var totalTweets []Tweet
+
 	users.Find(nil).All(&_users)
 	fmt.Printf("  > Get %d users\n", len(_users))
 
@@ -49,6 +54,7 @@ func Run(processing_version int16) {
 			"_user": user.Id,
 		}).All(&_tweets)
 
+		totalTweets = append(totalTweets, _tweets...)
 		negativeTweets, otherTweets := negativeTweetsProcess(_tweets)
 
 		sample := Sample{
@@ -65,4 +71,31 @@ func Run(processing_version int16) {
 	}
 
 	fmt.Printf("  > Total of %d Samples Created\n", totalSamples)
+
+	totalLists := 0
+	listCount := 0
+	listPersist := List{
+		bson.NewObjectId(),
+		[]bson.ObjectId{},
+		[]bson.ObjectId{},
+	}
+
+	for _, tweetInSample := range totalTweets {
+		if listCount > LIST_LIMIT {
+			lists.Insert(&listPersist)
+			totalLists = totalLists + 1
+			listCount = 0
+
+			listPersist = List{
+				bson.NewObjectId(),
+				[]bson.ObjectId{},
+				[]bson.ObjectId{},
+			}
+		}
+
+		listPersist.Tweets = append(listPersist.Tweets, tweetInSample.Id)
+		listCount = listCount + 1
+	}
+
+	fmt.Printf("  > Total of %d Lists Created\n", totalLists)
 }
