@@ -75,6 +75,16 @@ type List struct {
 	Specialists	[]bson.ObjectId `bson:"specialists_done"`
 }
 
+type Question struct {
+	Index int `bson:"question_index" json:"question_index"`
+	Impact int `bson:"impact" json:"impact"`
+}
+
+type Answer struct {
+	Tweet bson.ObjectId `bson:"to_tweet" json:"to_tweet"`
+	Question []Question `bson:"question" json:"question"`
+}
+
 func (s *Sample) IsValid() bool {
 	otherTweetsQtd := len(s.OtherTweets)
 	negativeTweetsQtd := len(s.NegativeTweets)

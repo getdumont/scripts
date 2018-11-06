@@ -9,7 +9,8 @@ import (
 var (
 	SENTIMENT_PILOT = "sentiment-pilot"
 	SAMPLE_ANALYTIC = "sample-analytic"
-	Kinds = []string{SENTIMENT_PILOT, SAMPLE_ANALYTIC}
+	ANSWERED_SAMPLE = "answered-sample"
+	Kinds = []string{SENTIMENT_PILOT, SAMPLE_ANALYTIC, ANSWERED_SAMPLE}
 )
 
 func Run(kind string, path string) {
@@ -20,6 +21,8 @@ func Run(kind string, path string) {
 			outputValue = SentimentPilot()
 		case SAMPLE_ANALYTIC:
 			outputValue = SampleAnalytic()
+		case ANSWERED_SAMPLE:
+			outputValue = AnsweredSample()
 	}
 
 	date := time.Now().Format("2006-01-02-15-04")
