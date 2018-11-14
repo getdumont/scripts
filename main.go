@@ -12,6 +12,7 @@ import (
 var (
 	app = kingpin.New("dumont_scripts", "CLI for database edition of dumont project")
 	processing_version = app.Flag("processing_version", "The processing version that will be used to get sample").Short('p').Default("0").Int16()
+	no_date = app.Flag("no_date", "The processing version that will be used to get sample").Short('n').Default("true").Bool()
 
 	pull = app.Command("pull", "Bring cloud database to local")
 	sample = app.Command("sample", "Mount a sample collection")
@@ -30,6 +31,6 @@ func main() {
 		case sample.FullCommand():
 			select_sample.Run(*processing_version)
 		case export.FullCommand():
-			exportables.Run(*exportKind, *exportPath)
+			exportables.Run(*exportKind, *exportPath, *no_date)
 	}
 }

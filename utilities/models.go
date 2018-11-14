@@ -22,6 +22,11 @@ type Sentiment struct {
 	Magnitude float64 `bson:"magnitude"`
 }
 
+type Token struct {
+	Value	string	`bson:"value"`
+	Kind	string	`bson:"pos"`
+}
+
 type Tweet struct {
 	Id 					bson.ObjectId 	`bson:"_id"`
 	ProcessingVersion 	int 			`bson:"processing_version"`
@@ -34,10 +39,15 @@ type Tweet struct {
 	TextObject 			TextObject 		`bson:"text_object"`
 	CleanSentiment 		Sentiment 		`bson:"clean_sentiment"`
 	CleanText 			string 			`bson:"clean_text"`
-	CleanTextTree 		bson.M 			`bson:"clean_tree"`
+	CleanTextTree 		[]Token 		`bson:"clean_tree"`
 	RawSentiment 		Sentiment 		`bson:"raw_sentiment"`
-	RawTextTree 		bson.M 			`bson:"raw_tree"`
+	RawTextTree 		[]Token 		`bson:"raw_tree"`
 	WithoutRt 			string 			`bson:"without_rt"`
+}
+
+type AnswerResumed struct {
+	Id bson.ObjectId `bson:"_id" json:"id"`
+	Questions []QuestionArray `bson:"questions" json:"questions"`
 }
 
 func (t *Tweet) GetSentimentScoreAverage() float64 {
@@ -79,6 +89,8 @@ type Question struct {
 	Index int `bson:"question_index" json:"question_index"`
 	Impact int `bson:"impact" json:"impact"`
 }
+
+type QuestionArray []Question
 
 type Answer struct {
 	Tweet bson.ObjectId `bson:"to_tweet" json:"to_tweet"`

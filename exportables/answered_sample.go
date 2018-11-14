@@ -6,15 +6,8 @@ import (
 	. "github.com/getdumont/scripts/utilities"
 )
 
-type questionArray []Question
-
-type answerResumed struct {
-	Id bson.ObjectId `bson:"_id" json:"id"`
-	Questions []questionArray `bson:"questions" json:"questions"`
-}
-
 func AnsweredSample() []byte {
-	var _answers []answerResumed
+	var _answers []AnswerResumed
 	answers, answerConnClose := ConnectAndGetCollection(LocalConfig, "answers")
 
 	defer answerConnClose()
