@@ -36,7 +36,8 @@ func flattenQuestions(questions []QuestionArray) []Question {
 
 func PredictData() []byte {
 	var _answers []AnswerResumed
-	head := []string{"sentiment", "magnitude", "verb", "pron", "propn"}
+	// head := []string{"sentiment", "magnitude", "verb", "pron", "propn"}
+	head := []string{"sentiment"}
 	dataset := Dataset{
 		[]arrayOfFloat{},
 		[]int{},
@@ -44,11 +45,11 @@ func PredictData() []byte {
 		[]string{},
 	}
 
-	headAndIdx := map[string]int{
-		"VERB": 3,
-		"PRON": 4,
-		"PROPN": 5,
-	}
+	// headAndIdx := map[string]int{
+	// 	"VERB": 3,
+	// 	"PRON": 4,
+	// 	"PROPN": 5,
+	// }
 
 	answers, answerConnClose := ConnectAndGetCollection(LocalConfig, "answers")
 	tweets, tweetConnClose := ConnectAndGetCollection(LocalConfig, "tweets")
@@ -72,11 +73,11 @@ func PredictData() []byte {
 		}
 
 		data[0] = t.CleanSentiment.Score
-		data[1] = t.CleanSentiment.Magnitude
+		// data[1] = t.CleanSentiment.Magnitude
 
 		for _, word := range t.CleanTextTree {
-			idx := headAndIdx[word.Kind]
-			data[idx] = data[idx] + 1.0
+			// idx := headAndIdx[word.Kind]
+			// data[idx] = data[idx] + 1.0
 
 			w := strings.ToLower(word.Value)
 			headIdx := indexOf(head, w)
@@ -95,7 +96,20 @@ func PredictData() []byte {
 		}
 	}
 
+	newData := []arrayOfFloat{}
+	headLen := len(head)
+	for _, d := range dataset.Data {
+		missing := headLen - len(d)
+		data := d
+		for x := 0; x < missing; x++ {
+			data = append(data, 0.0)
+		}
+
+		newData = append(newData, data)
+	}
+
 	dataset.FeatureNames = head
+	dataset.Data = newData
 	resp, _ := json.Marshal(dataset)
 
 	return resp

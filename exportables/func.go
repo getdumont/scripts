@@ -16,6 +16,7 @@ var (
 
 func Run(kind string, path string, no_date bool) {
 	var outputValue []byte
+	fmt.Printf("%v\n", no_date)
 
 	switch kind {
 		case SENTIMENT_PILOT:
@@ -30,7 +31,7 @@ func Run(kind string, path string, no_date bool) {
 
 	outputName := ""
 
-	if no_date {
+	if no_date == true {
 		outputName = fmt.Sprintf("%s/%s.json", path, kind)
 	} else {
 		date := time.Now().Format("2006-01-02-15-04")

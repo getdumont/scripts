@@ -1,6 +1,7 @@
 package exportables
 
 import (
+	"time"
 	"encoding/json"
 	"github.com/globalsign/mgo/bson"
 	. "github.com/getdumont/scripts/utilities"
@@ -9,8 +10,8 @@ import (
 type resumedTweet struct {
 	Id bson.ObjectId `bson:"_id" json:"id"`
 	User bson.ObjectId `bson:"_user" json:"user"`
+	CreatedAt *time.Time `bson:"created_at" json:"created_at"`
 	CleanSentiment Sentiment `bson:"clean_sentiment" json:"clean_sentiment"`
-	RawSentiment Sentiment `bson:"raw_sentiment" json:"raw_sentiment"`
 }
 
 func SentimentPilot() []byte {
